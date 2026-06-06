@@ -371,7 +371,7 @@ FodyWeavers.xsd
 *.tar.gz
 
 # Game reference DLLs (too large, users must provide their own)
-lib/
+!lib/
 
 # Loose DLLs at project root
 /*.dll
