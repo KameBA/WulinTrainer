@@ -20,11 +20,8 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Restore Dependencies
-      run: |
-        dotnet restore \
-        --source "https://api.nuget.org/v3/index.json" \
-        --source "https://nuget.bepinex.dev/v3/index.json" \
-        --source "https://nuget.samboy.dev/v3/index.json"
+      # Put the entire command on one line so PowerShell doesn't get confused
+      run: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://nuget.bepinex.dev/v3/index.json" --source "https://nuget.samboy.dev/v3/index.json"
 
     - name: Build Project
       run: dotnet build --configuration Release
