@@ -1,0 +1,41 @@
+name: Build WulinTrainer Plugin
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Restore Dependencies
+      run: |
+        dotnet restore \
+        --source "https://api.nuget.org/v3/index.json" \
+        --source "https://nuget.bepinex.dev/v3/index.json" \
+        --source "https://nuget.samboy.dev/v3/index.json"
+
+    - name: Build Project
+      # We pass /p:PreBuildEvent= and /p:PostBuildEvent= to clear the local xcopy scripts 
+      # so the runner doesn't fail looking for your D:\ Steam directory.
+      run: |
+        dotnet build --configuration Release \
+        /p:PreBuildEvent="" \
+        /p:PostBuildEvent=""
+
+    - name: Upload Mod Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: HaxxToyBox-Plugin
+        path: bin/Release/net6.0/HaxxToyBox.dll
