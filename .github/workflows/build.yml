@@ -1,8 +1,12 @@
-name: Build WulinTrainer Plugin
+name: Build and Release WulinTrainer Plugin
 
 on:
   push:
+    # Trigger on commits
     branches: [ "main", "master" ]
+    # trigger on entering tags
+    tags:
+      - 'v*'
   pull_request:
     branches: [ "main", "master" ]
 
@@ -20,14 +24,22 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Restore Dependencies
-      # Put the entire command on one line so PowerShell doesn't get confused
       run: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://nuget.bepinex.dev/v3/index.json" --source "https://nuget.samboy.dev/v3/index.json"
 
     - name: Build Project
       run: dotnet build --configuration Release
 
-    - name: Upload Mod Artifact
+    - name: Upload Mod Artifact (Internal)
       uses: actions/upload-artifact@v4
       with:
         name: HaxxToyBox-Plugin
         path: bin/Release/net6.0/HaxxToyBox.dll
+
+    # Push artifact to release
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: bin/Release/net6.0/HaxxToyBox.dll
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
