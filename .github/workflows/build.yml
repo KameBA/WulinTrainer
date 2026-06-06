@@ -27,12 +27,7 @@ jobs:
         --source "https://nuget.samboy.dev/v3/index.json"
 
     - name: Build Project
-      # We pass /p:PreBuildEvent= and /p:PostBuildEvent= to clear the local xcopy scripts 
-      # so the runner doesn't fail looking for your D:\ Steam directory.
-      run: |
-        dotnet build --configuration Release \
-        /p:PreBuildEvent="" \
-        /p:PostBuildEvent=""
+      run: dotnet build --configuration Release
 
     - name: Upload Mod Artifact
       uses: actions/upload-artifact@v4
