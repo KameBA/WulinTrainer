@@ -88,6 +88,11 @@
     <EmbeddedResource Include="Assets\toybox" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="UnityProject\**\*.cs" />
+    <None Include="UnityProject\**\*.cs" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="Exists('D:\[Game]Steam\')">
     <Exec Command="xcopy &quot;$(ProjectDir)bin\Debug\net6.0\*.dll&quot; &quot;D:\[Game]Steam\Steam\steamapps\common\WulinSH\BepInEx\plugins\&quot; /Y" />
   </Target>
